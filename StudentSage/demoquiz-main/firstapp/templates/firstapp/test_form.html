@@ -1,0 +1,27 @@
+{% extends 'firstapp/base.html' %}
+{% load static %}
+{% block style_block %}
+<link rel="stylesheet" href="{% static 'firstapp/test_form.css' %}">
+{% endblock %}
+
+{% block body_block %}
+<div class="content-container">
+    <h1 class="section-title">Update Test {{object}}</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+            {{ field }}
+            {% if field.help_text %}
+            <small class="form-text">{{ field.help_text }}</small>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <div class="form-button" style="display: flex; justify-content: space-between;">
+            <button type="submit" class="button button-primary">Submit</button>
+            <button type="reset" class="button button-primary">Reset</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

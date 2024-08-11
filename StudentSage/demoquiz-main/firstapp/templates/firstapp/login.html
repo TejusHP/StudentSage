@@ -1,0 +1,44 @@
+{% extends 'firstapp/base.html' %}
+{% block title %}Login{% endblock %}
+{% load static %}
+
+{% block style_block %}
+<link rel="stylesheet" href="{% static 'firstapp/login_register.css' %}">
+{% endblock %}
+
+{% block body_block %}
+
+<div class="content-container">
+    <h1 class="section-title">Login</h1>
+
+    <form method="post" class="form">
+        {% csrf_token %}
+        
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password1">Password:</label>
+            <input type="password" id="password1" name="password1" required>
+        </div>
+
+        <div class="action-buttons">
+            <button type="submit" class="button button-primary">Login</button>
+            <a href="{% url 'firstapp:register' %}" class="button button-outline">Register</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

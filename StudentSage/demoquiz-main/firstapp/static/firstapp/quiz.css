@@ -1,0 +1,210 @@
+:root {
+    --color-bg: #ffffff;
+    --color-text: #24292e;
+    --color-gray: #6a737d;
+    --color-border: #e1e4e8;
+    --color-link: #0366d6;
+    --color-btn: #2ea44f;
+    --color-btn-hover: #22863a;
+    --color-header-bg: #24292e;
+    --color-header-text: #ffffff;
+    --color-table-header: #f6f8fa;
+    --color-table-row-even: #f8f9fa;
+    --color-table-row-hover: #f1f8ff;
+    --color-option-bg: #f6f8fa;
+    --color-option-hover: #e1e4e8;
+    --color-selected: #d0e7ff; /* Light blue color for selected options */
+}
+
+.quiz-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-top: 24px;
+}
+
+.sidebar {
+    flex: 1 1 20%;
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-header h2 {
+    font-size: 24px;
+    margin-bottom: 16px;
+}
+
+.question-nav {
+    display: flex;
+    justify-content: space-evenly;
+    list-style: none;
+    padding: 0;
+}
+
+.question-nav li {
+    margin-bottom: 8px;
+}
+
+.nav-button {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--color-bg);
+    color: var(--color-link);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.nav-button:hover {
+    background-color: var(--color-table-row-hover);
+}
+
+.main-menu-button {
+    margin-top: 16px;
+    width: 100%;
+    padding: 8px;
+}
+
+.main-content {
+    flex: 1 1 75%;
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.quiz-title {
+    font-size: 32px;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 8px;
+    margin: 0;
+}
+
+.timer {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--color-text);
+}
+
+.question-container {
+    display: none;
+    margin-bottom: 24px;
+    padding: 16px;
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.question-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.question-label {
+    font-weight: bold;
+}
+
+.question-tags {
+    color: var(--color-gray);
+}
+
+.question-text {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 16px 0;
+}
+
+.options-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.option-container {
+    background-color: var(--color-option-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 8px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.option-container:hover {
+    background-color: var(--color-option-hover);
+    border-color: var(--color-link);
+}
+
+.option-label {
+    display: block;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 8px;
+    margin: 0;
+}
+
+input[type="radio"] {
+    display: none;
+}
+
+input[type="radio"]:checked +.option-label {
+    background-color: var(--color-selected);
+    .option-container{
+        background-color: var(--color-selected);
+        color: var(--color-text);
+    }
+    color: var(--color-text);
+    border-radius: 4px;
+    padding: 8px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.button {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.button-outline {
+    background-color: var(--color-bg);
+    color: var(--color-link);
+}
+
+.button-outline:hover {
+    background-color: var(--color-btn-hover);
+    color: #fff;
+}
+
+.button-primary {
+    background-color: var(--color-btn);
+    color: #fff;
+}
+
+.button-primary:hover {
+    background-color: var(--color-btn-hover);
+}

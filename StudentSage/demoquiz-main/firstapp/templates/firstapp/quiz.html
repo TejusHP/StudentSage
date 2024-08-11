@@ -1,0 +1,132 @@
+{% extends "firstapp/base.html" %}
+
+{% load static %}
+{% load firstapp_extras %}
+{% block style_block %}
+<link rel="stylesheet" href="{% static 'firstapp/quiz.css' %}">
+<link rel="stylesheet" href="{% static 'firstapp/student_detail.css' %}">
+{% endblock %}
+
+{% block body_block %}
+<div class="quiz-container container">
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>Questions</h2>
+        </div>
+        <ul class="question-nav">
+            {% for question in test.test_data.questions %}
+            <li>
+                <button type="button" class="nav-button button-outline button-small" data-question-id="question-{{ question.id }}">
+                    {{ question.id }}
+                </button>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <h1 class="quiz-title">Quiz</h1>
+            {%if test_mode|compareTwo:'one'%}
+            <div class="timer" id="timer">00:00</div>
+            {%endif%}
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            {% for question in test.test_data.questions %}
+            <div id="question-{{ question.id }}" class="question-container">
+                <div class="question-header">
+                    <span class="question-label">Question {{ question.id }}</span>
+                    <span class="question-tags">{{ question.tags }}</span>
+                </div>
+                <h3 class="question-text">{{ question.question }}</h3>
+                <p>Marks: {{ question.marks }}</p>
+                <div class="options-grid">
+                    {% for option in question.options %}
+                    <div class="option-container">
+                        <input type="radio" name="question--{{ question.id }}" id="option--{{ question.id }}--{{ forloop.counter }}" value="{{ option }}">
+                        <label for="option--{{ question.id }}--{{ forloop.counter }}" class="option-label">{{ option }}</label>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+
+            <div class="navigation-buttons">
+                <button type="button" class="button button-outline" id="prev-button">Previous</button>
+                <button type="button" class="button button-outline" id="next-button">Next</button>
+                <button type="submit" class="button button-primary" id="submit-button">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const questions = document.querySelectorAll('.question-container');
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+        const submitButton = document.getElementById('submit-button');
+        const navButtons = document.querySelectorAll('.nav-button');
+        let currentQuestionIndex = 0;
+
+        function showQuestion(index) {
+            questions.forEach((question, i) => {
+                question.style.display = i === index ? 'block' : 'none';
+            });
+            prevButton.style.display = index === 0 ? 'none' : 'inline-block';
+            nextButton.style.display = index === questions.length - 1 ? 'none' : 'inline-block';
+            submitButton.style.display = index === questions.length - 1 ? 'inline-block' : 'none';
+        }
+
+        navButtons.forEach((button, index) => {
+            button.addEventListener('click', function() {
+                currentQuestionIndex = index;
+                showQuestion(currentQuestionIndex);
+            });
+        });
+
+        prevButton.addEventListener('click', function() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion(currentQuestionIndex);
+            }
+        });
+
+        nextButton.addEventListener('click', function() {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                showQuestion(currentQuestionIndex);
+            }
+        });
+
+        showQuestion(currentQuestionIndex);
+
+        // Timer
+        {%if test_mode|compareTwo:'one'%}
+        const timerElement = document.getElementById('timer');
+        const now = new Date();
+        const endTime = new Date("{{ test.end_time|date:'c' }}");
+        const startTime = new Date("{{ test.start_time|date:'c' }}");
+        let timeLeft = Math.floor((endTime - now) / 1000)
+        if (timeLeft<0)
+        {
+            timeLeft = Math.floor(Math.abs(endTime-startTime)/1000)
+        }
+
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            if (timeLeft > 0) {
+                timeLeft--;
+            } else {
+                document.querySelector('form').submit();
+            }
+        }
+        setInterval(updateTimer, 1000);
+        {%endif%}
+    });
+</script>
+{% endblock %}

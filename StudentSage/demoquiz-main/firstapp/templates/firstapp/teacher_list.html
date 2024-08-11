@@ -1,0 +1,10 @@
+{% extends 'firstapp/base.html' %}
+{%block body_block%}
+<h1>Welcome to Our page</h1>
+<h3>here are the registered Teachers</h3>
+<ol>
+    {%for i in teachers %}
+    <li><a href="{{i.id}}">{{i.name.username}}</a></li>
+    {%endfor%}
+</ol>
+{%endblock%}

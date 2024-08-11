@@ -1,0 +1,206 @@
+:root {
+    --color-bg: #ffffff;
+    --color-text: #24292e;
+    --color-gray: #6a737d;
+    --color-border: #e1e4e8;
+    --color-link: #0366d6;
+    --color-btn: #2ea44f;
+    --color-btn-hover: #22863a;
+    --color-header-bg: #24292e;
+    --color-header-text: #ffffff;
+    --color-table-header: #f6f8fa;
+    --color-table-row-even: #f8f9fa;
+    --color-table-row-hover: #f1f8ff;
+    --color-solution-bg: #f1f8ff;
+    --color-marks-bg: #f8f9fa;
+    --color-marks-positive: #28a745;
+    --color-marks-negative: #d73a49;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans",
+        Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+.result-container {
+    padding: 24px 0;
+}
+
+.attempt-time h3, .score-summary h2, .AoI h3 {
+    margin: 24px 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.score-summary {
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    position: relative;
+}
+
+.progress-bar {
+    width: 100%;
+    background-color: var(--color-gray);
+    border-radius: 25px;
+    overflow: hidden;
+    margin: 24px 0;
+}
+
+.progress-bar-fill {
+    height: 25px;
+    background-color: var(--color-btn);
+    width: 0;
+    border-radius: 25px;
+    text-align: center;
+    line-height: 25px;
+    color: white;
+    transition: width 2s ease-in-out;
+}
+
+.confetti {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    top: 0;
+    left: 0;
+}
+
+.question {
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.question-text {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.answer {
+    margin-bottom: 16px;
+}
+
+.wrong-answer, .correct-answer {
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+.wrong-answer {
+    background-color: #ffeef0;
+    color: #d73a49;
+}
+
+.correct-answer {
+    background-color: #e6ffed;
+    color: #28a745;
+}
+
+.solution {
+    background-color: var(--color-solution-bg);
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    border: 1px solid var(--color-border);
+}
+
+.marks {
+    background-color: var(--color-marks-bg);
+    padding: 8px 12px;
+    border-radius: 6px;
+    display: inline-block;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.marks-positive {
+    color: var(--color-marks-positive);
+}
+
+.marks-negative {
+    color: var(--color-marks-negative);
+}
+
+.AoI {
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.button {
+    display: inline-block;
+    padding: 6px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    transition: all 0.2s ease-in-out;
+    text-decoration: none;
+}
+
+.button-outline {
+    color: var(--color-link);
+    background-color: var(--color-bg);
+    border-color: var(--color-link);
+}
+
+.button-outline:hover {
+    color: #ffffff;
+    background-color: var(--color-link);
+    border-color: var(--color-link);
+}
+.confetto {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #ffc107;
+    opacity: 0.7;
+    animation: confetti-fall linear infinite;
+}
+
+@keyframes confetti-fall {
+    from {
+        transform: translateY(-100vh) rotate(0deg);
+    }
+    to {
+        transform: translateY(60vh) rotate(720deg);
+    }
+}

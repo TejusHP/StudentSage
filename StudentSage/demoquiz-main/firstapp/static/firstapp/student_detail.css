@@ -1,0 +1,211 @@
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    margin-bottom: 24px;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+
+  thead {
+    background-color: #f1f8ff;
+  }
+
+  th,
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--color-border);
+    text-align: center;
+  }
+
+  th {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    color: #57606a;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  tbody tr:nth-child(even) {
+    background-color: #f8fafc;
+  }
+
+  tbody tr:hover {
+    background-color: #f1f8ff;
+  }
+
+  /* Enhanced Button Styles */
+
+  .button-primary {
+    color: #ffffff;
+    background-color: #2ea44f;
+    border-color: #2ea44f;
+  }
+
+  .button-primary:hover {
+    background-color: #2c974b;
+    border-color: #2c974b;
+  }
+
+  .button-outline {
+    color: #0366d6;
+    background-color: #ffffff;
+    border-color: #0366d6;
+  }
+
+  .button-outline:hover {
+    color: #ffffff;
+    background-color: #0366d6;
+    border-color: #0366d6;
+  }
+
+  .button-small {
+    padding: 3px 12px;
+    font-size: 12px;
+    line-height: 20px;
+  }
+
+  /* Status Badge */
+  .status-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 18px;
+    border-radius: 12px;
+    text-transform: uppercase;
+  }
+
+  .status-active {
+    background-color: #e6ffed;
+    color: #28a745;
+  }
+
+  .status-inactive {
+    background-color: #ffeef0;
+    color: #d73a49;
+  }
+
+  /* Container Styles */
+  .content-container {
+    background-color: #ffffff;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .section-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  /* Action Buttons Container */
+  .action-buttons {
+    margin-top: 24px;
+    display: flex;
+    gap: 12px;
+  }
+
+  .student-details,
+  .teacher-details {
+    background-color: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .student-info,
+  .teacher-info {
+    margin-bottom: 24px;
+  }
+
+  .tests-container,
+  .students-container {
+    margin-top: 24px;
+  }
+
+  .action-buttons {
+    margin-top: 24px;
+  }
+
+  .action-buttons .button {
+    margin-right: 8px;
+  }
+
+  .form {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    transition: border-color 0.3s ease;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus {
+    outline: none;
+    border-color: var(--color-link);
+  }
+
+  .form-text {
+    font-size: 0.875rem;
+    color: var(--color-gray);
+  }
+
+  .error-message {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+
+  .messages {
+    margin-bottom: 1rem;
+  }
+
+  .message {
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+  }
+
+  .message.error {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+  }
+
+  .message.success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+  }

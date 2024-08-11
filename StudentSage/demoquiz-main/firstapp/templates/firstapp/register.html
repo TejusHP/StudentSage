@@ -1,0 +1,47 @@
+{% extends 'firstapp/base.html' %}
+{% block title %}Register{% endblock %}
+
+
+{% load static %}
+{% block style_block %}
+<link rel="stylesheet" href="{% static 'firstapp/login_register.css' %}">
+{% endblock %}
+
+
+
+{% block body_block %}
+
+<div class="content-container">
+    <h1 class="section-title">Register</h1>
+
+    <form method="post" class="form">
+        {% csrf_token %}
+        
+        {% for field in RegisterForm %}
+        <div class="form-group">
+            {{ field.label_tag }}
+            {{ field }}
+            {% if field.help_text %}
+            <small class="form-text text-muted">{{ field.help_text|safe }}</small>
+            {% endif %}
+            {% for error in field.errors %}
+            <div class="error-message">{{ error }}</div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+
+        {% for field in TeacherChoice %}
+        <div class="form-group">
+            {{ field.label_tag }}
+            {{ field }}
+        </div>
+        {% endfor %}
+
+        <div class="action-buttons">
+            <button type="submit" class="button button-primary">Register</button>
+            <a href="{% url 'firstapp:login' %}" class="button button-outline">Login</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

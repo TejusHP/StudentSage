@@ -1,0 +1,30 @@
+{% extends 'firstapp/base.html' %}
+{% load static %}
+{% block style_block %}
+<link rel="stylesheet" href="{% static 'firstapp/login_register.css' %}">
+{% endblock %}
+
+{% block body_block %}
+<div class="content-container">
+    {% if not form.instance.pk %}
+    <h1 class="section-title">Add Student</h1>
+    {% else %}
+    <h1 class="section-title">Update Student</h1>
+    {% endif %}
+    <form action="" method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+            {{ field }}
+            {% if field.help_text %}
+            <small class="form-text">{{ field.help_text }}</small>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <div class="form-button" style="display: flex; justify-content: center;">
+            <button type="submit" class="button button-primary">Submit</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends "firstapp/base.html" %}
+{% load firstapp_extras %}
+{% block title %}Student Details{% endblock %}
+
+
+
+{% load static %}
+{% block style_block %}
+<link rel="stylesheet" href="{% static 'firstapp/student_detail.css' %}">
+{% endblock %}
+
+
+
+{% block body_block %}
+
+<div class="content-container">
+    <h1 class="section-title">Student Details</h1>
+
+    <div class="student-info">
+        <h2>{{ students.name.first_name }} {{ students.name.last_name }}</h2>
+        <p><strong>Username:</strong> {{ students.name.username }}</p>
+        <p><strong>About:</strong> {{ students.description }}</p>
+    </div>
+
+    <div class="tests-container">
+        <h2 class="section-title">Tests</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Test Name</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for test in students.teacher.tests.all %}
+                <tr>
+                    <td>{{ test.display_name }}</td>
+                    <td>
+                        {% if test.id in attempted_tests %}
+                            {% if students|student_test_attempt_status:test == 'Accepted' %}
+                                <span class="status-badge status-active">Attempted</span>
+                            {% else %}
+                                <span class="status-badge status-inactive">Not Taken</span>
+                            {% endif %}
+                        {% else %}
+                            {%if  test.end_time|compare_timezone|compareTwo:'greater' %}
+                                <span id="test-status-{{ test.id }}" class="status-badge status-active">Active</span>
+                            {%else%}
+                                <span class="status-badge status-inactive">Not Taken</span>
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if test.id in attempted_tests %}
+                            <a href="{% url 'firstapp:preview-test' id=test.id  stud_id=students.id %}" class="button button-outline button-small">View</a>
+                            <a href="{% url 'firstapp:download-file' test.file_path %}" class="button button-outline button-small">Download</a>
+                        {% else %}
+                            {% if perms.firstapp.change_students %}
+                                {%if  test.start_time|compare_timezone|compareTwo:'lesser' %}
+                                    <a href="{% url 'firstapp:attend-test' test_id=test.id %}" class="button button-primary button-small">Take Test</a>
+                                {%else%}
+                                    <span class="button button-primary button-small" style="background-color: grey;">Take Test</span>
+                                {% endif %}
+                            {%else%}
+                                    <span class="button button-primary button-small" style="background-color: grey;">Take Test</span>
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if perms.firstapp.change_students %}
+    <div class="action-buttons" style="display: flex;justify-content: space-between;">
+        <a href="{% url 'firstapp:update-student' pk=students.pk %}" class="button button-primary">Update Profile</a>
+        <a href="{% url 'firstapp:react-chatbot' %}" class="button button-outline">Chat</a>
+    </div>
+    {% endif %}
+</div>
+
+
+<script>
+    function updateTestStatus() {
+        const now = new Date();
+        
+        {% for test in students.teacher.tests.all %}
+            {% if test.id not in attempted_tests %}
+                (function() {
+                    const testId = {{ test.id }};
+                    const startTime = new Date("{{ test.start_time|date:'c' }}");
+                    const endTime = new Date("{{ test.end_time|date:'c' }}");
+                    const statusElement = document.getElementById(`test-status-${testId}`);
+                    if (now < startTime) {
+                        const timeUntilStart = Math.floor((startTime - now) / 1000);
+                        statusElement.textContent = `Starts in ${timeUntilStart}s`;
+                    } else if (now >= startTime && now < endTime) {
+                        const secondsSinceStart = Math.floor((endTime - now) / 1000);
+                        statusElement.textContent = `Active ( ends in ${secondsSinceStart}s)`;
+                    }
+
+                })();
+            {%endif%}
+        {% endfor %}
+    }
+
+    updateTestStatus();
+    setInterval(updateTestStatus, 1000);
+</script>
+
+{% endblock %}

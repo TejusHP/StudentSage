@@ -1,0 +1,45 @@
+{% extends 'firstapp/base.html' %}
+{% load firstapp_extras %}
+
+
+{% load static %}
+{% block style_block %}
+<link rel="stylesheet" href="{% static 'firstapp/result_page.css' %}">
+<link rel="stylesheet" href="{% static 'firstapp/student_detail.css' %}">
+{% endblock %}
+
+{% block body_block %}
+<div class="content-container">
+<div class="container result-container">
+    {% for question in test.test_data.questions %}
+    <div class="question">
+        <div class="question-text">
+            {{ question.id }} . {{ question.question }}
+        </div>
+        <div class="answer">
+            {%for option in question.options%}
+                {% if option|compareTwo:question.correct_answer %}
+                <div class="correct-answer">{{ option }}</div>
+                {%else%}
+                <div class="wrong-answer">{{ option }}</div>
+                {%endif%}
+            {%endfor%}
+            <div class="solution">Solution - {{ question.solution }}</div>
+            <div class="marks marks-positive">Marks Assigned - {{question.marks}}</div>
+                    <h3>Question Tags</h3>
+                    <div class="action-buttons">
+                        {% for tag in question.tags %}
+                            <a href="#" class="button button-outline">{{ tag }}</a>
+                        {% endfor %}
+                    </div>
+        </div>
+    </div>
+    {% endfor %}
+    <div class="action-buttons" style="display: flex;justify-content: space-between;">
+        <a href="{% url 'firstapp:home' %}" class="button button-outline">Back to Tests</a>
+        <a href="{% url 'firstapp:update-test' pk=test.id %}" class="button button-primary">Update Test</a>
+    </div>
+</div>
+
+
+{%endblock%}

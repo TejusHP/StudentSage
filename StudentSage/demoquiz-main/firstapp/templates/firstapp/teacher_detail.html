@@ -1,0 +1,116 @@
+{% extends "firstapp/base.html" %}
+{% block title %}Teacher Dashboard{% endblock %}
+
+
+
+{% load static %}
+{% block style_block %}
+<link rel="stylesheet" href="{% static 'firstapp/teacher_detail.css' %}">
+{% endblock %}
+
+
+
+{% block body_block %}
+
+<div class="content-container">
+    <h1 class="section-title">Teacher Details</h1>
+
+    <div class="teacher-info">
+        <h2>{{ teacher.name }}</h2>
+    </div>
+
+    <div class="students-container">
+        <h3 class="section-title">Students</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in teacher.students.all %}
+                <tr>
+                    <td>
+                        <div style="display: flex; justify-content: space-between;">
+                            <a href="{% url 'firstapp:detail-student' pk=student.id %}">{{ student.name }}</a>
+                            <a href="{% url 'firstapp:delete-student' pk=student.id %}"><img src="{% static 'firstapp/images/delete.png'%} " width="30px" height="30px" alt="img"></a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="tests-container">
+        <h3 class="section-title">Tests Created</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Test</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Status</th>
+                    <th>Preview</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for test in teacher.tests.all %}
+                <tr>
+                    <td>
+                        <a href="{% url 'firstapp:test_dashboard' pk=test.id %}">{{ test.display_name }}</a>
+                    </td>
+                    <td>
+                        {{test.start_time}}
+                    </td>
+                    <td>
+                        {{test.end_time}}
+                    </td>
+                    <td>
+                        <span id="test-status-{{ test.id }}" class="status-badge status-active">Active</span>
+                    </td>
+                    <td>
+                        <a href="{% url 'firstapp:test_formation' test_id=test.id %}" class="button button-outline button-small">preview</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if perms.firstapp.add_students %}
+    <div class="action-buttons">
+        <a href="{% url 'firstapp:add-student' %}" class="button button-primary">Add Student</a>
+        <a href="{% url 'firstapp:upload-file' %}" class="button button-outline">Upload File</a>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    function updateTestStatus() {
+        const now = new Date();
+        
+        {% for test in teacher.tests.all %}
+            (function() {
+                const testId = {{ test.id }};
+                const startTime = new Date("{{ test.start_time|date:'c' }}");
+                const endTime = new Date("{{ test.end_time|date:'c' }}");
+                const statusElement = document.getElementById(`test-status-${testId}`);
+                
+                if (now < startTime) {
+                    const timeUntilStart = Math.floor((startTime - now) / 1000);
+                    statusElement.textContent = `Starts in ${timeUntilStart}s`;
+                } else if (now >= startTime && now < endTime) {
+                    const secondsSinceStart = Math.floor((endTime - now) / 1000);
+                    statusElement.textContent = `Active ( ends in ${secondsSinceStart}s)`;
+                } else {
+                    statusElement.textContent = 'completed';
+                }
+            })();
+        {% endfor %}
+    }
+
+    updateTestStatus();
+    setInterval(updateTestStatus, 1000);
+</script>
+{% endblock %}

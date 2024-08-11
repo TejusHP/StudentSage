@@ -1,0 +1,126 @@
+{% extends 'firstapp/base.html' %}
+{% load firstapp_extras %}
+
+
+{% load static %}
+{% block style_block %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<link rel="stylesheet" href="{% static 'firstapp/result_page.css' %}">
+{% endblock %}
+
+
+
+{% block body_block %}
+
+<div class="container result-container">
+    <div class="confetti"></div>
+    {% if test_mode|compareTwo:'one' %}
+    <div class="attempt-time">
+        <h3>Attempt Time : {{start_time}} - {{end_time}}</h3>
+    </div>
+    {% endif %}
+
+    <div class="score-summary">
+        {% if perms.firstapp.change_students %}
+        <h2>You have scored : {{marks_obtained}} of {{total_marks}}</h2>
+        {% else %}
+        <h2>{{student}} have scored : {{marks_obtained}} of {{total_marks}}</h2>
+        {%endif%}
+        <div class="progress-bar">
+            <div class="progress-bar-fill" ></div>
+        </div>
+        <div style="display: flex;justify-content: center;">
+            <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+        </div>
+    </div>
+
+    {% for question in questions %}
+    <div class="question">
+        <div class="question-text">
+            {{ question.id }} . {{ question.question }}
+        </div>
+        <div class="answer">
+            {% if question.answer_given|compareTwo:'incorrect' %}
+            <div class="wrong-answer">Wrong answer given - {{ question.answer_given_value }}</div>
+            <div class="correct-answer">Correct answer - {{ question.correct_answer }}</div>
+            <div class="solution">Solution - {{ question.solution }}</div>
+            <div class="marks marks-negative">Marks awarded - 0</div>
+            {% elif question.answer_given|compareTwo:'unattempted'%}
+            <div class="wrong-answer">Unattempted Question</div>
+            <div class="correct-answer">Correct answer - {{ question.correct_answer }}</div>
+            <div class="solution">Solution - {{ question.solution }}</div>
+            <div class="marks marks-positive">Marks awarded - 0</div>
+            {% else %}
+            <div class="correct-answer">Correct answer - {{ question.correct_answer }}</div>
+            <div class="solution">Solution - {{ question.solution }}</div>
+            <div class="marks marks-positive">Marks awarded - {{ question.marks }}</div>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+
+    {% if test_mode|compareTwo:'one' %}
+    <div class="AoI">
+        <h3>Area of improvements - click for improvement test</h3>
+        <div class="action-buttons">
+            {% for tag in tags %}
+                {% if perms.firstapp.change_students %}
+                <a href="{% url 'firstapp:improvement-test' topic_id=tag.id %}" class="button button-outline">{{ tag }}</a>
+                {% else %}
+                <a href="#" class="button button-outline">{{ tag }}</a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    var xValues = ["Correct", "Incorrect", "Unattempted"];
+var yValues = [{{correct_count}},{{incorrect_count}},{{unattempted_count}}];
+var barColors = [
+  "#28a745",
+  "#d73a49",
+  "#0366d6",
+];
+
+new Chart("myChart", {
+  type: "doughnut",
+  data: {
+    labels: xValues,
+    datasets: [{
+      backgroundColor: barColors,
+      data: yValues
+    }]
+  },
+  options: {
+    title: {
+      display: true,
+      text: "questions"
+    }
+  }
+});
+
+    document.addEventListener('DOMContentLoaded', function() {
+    const progressBarFill = document.querySelector('.progress-bar-fill');
+    const scorePercentage = {{marks_obtained}}/{{total_marks}}*100;
+    progressBarFill.style.width = scorePercentage + '%';
+    progressBarFill.textContent = scorePercentage + '%';
+
+    // Confetti animation
+    function createConfetti() {
+        const confettiContainer = document.querySelector('.confetti');
+        for (let i = 0; i < 50; i++) {
+            const confetto = document.createElement('div');
+            confetto.classList.add('confetto');
+            confetto.style.left = Math.random() * 100 + 'vw';
+            confetto.style.animationDuration = Math.random() * 3 + 2 + 's';
+            confettiContainer.appendChild(confetto);
+        }
+    }
+    createConfetti();
+});
+
+</script>
+
+{% endblock %}

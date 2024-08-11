@@ -1,0 +1,217 @@
+{% extends "firstapp/base.html" %}
+
+{% block title %}Upload File{% endblock %}
+
+{% block body_block %}
+<div class="form-container">
+    <h1>Upload File</h1>
+    <form action="" method="post" enctype="multipart/form-data" class="glass-form" id="upload-form">
+        {% csrf_token %}
+        <div class="form-group file-input-group">
+            <label for="id_file" class="file-label">
+                <i class="ai-upload"></i>
+                <span>Choose a file</span>
+            </label>
+            <input type="file" name="file" required id="id_file" class="file-input">
+            <div class="file-name" id="file-name">No file chosen</div>
+        </div>
+        <button type="submit" class="btn">
+            <i class="ai-cloud-upload"></i>
+            Upload
+        </button>
+    </form>
+
+    <div id="file-info" class="file-info hidden">
+        <h2>File Information</h2>
+        <div class="info-grid">
+            <div class="info-item">
+                <i class="ai-file"></i>
+                <p><strong>Name:</strong> <span id="info-file-name"></span></p>
+            </div>
+            <div class="info-item">
+                <i class="ai-file-size"></i>
+                <p><strong>Size:</strong> <span id="file-size"></span></p>
+            </div>
+            <div class="info-item">
+                <i class="ai-file-type"></i>
+                <p><strong>Type:</strong> <span id="file-type"></span></p>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    :root {
+    --primary-color: #2ea44f;
+    --secondary-color: #0366d6;
+    --accent-color: #22863a;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(27, 31, 35, 0.15);
+    --glass-shadow: rgba(27, 31, 35, 0.15);
+    --radius: 6px;
+    --transition-speed: 0.3s;
+    --text-color: var(--color-text);
+}
+
+.form-container {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.glass-form {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: 30px;
+    box-shadow: 0 4px 20px var(--glass-shadow);
+}
+
+.file-input-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.file-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    background-color: var(--secondary-color);
+    color: #fff;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background-color var(--transition-speed);
+}
+
+.file-label:hover {
+    background-color: var(--accent-color);
+}
+
+.file-label i {
+    margin-right: 10px;
+    font-size: 1.2em;
+}
+
+.file-input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.file-name {
+    margin-top: 10px;
+    text-align: center;
+    color: var(--text-color);
+}
+
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 15px;
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color var(--transition-speed);
+}
+
+.btn:hover {
+    background-color: var(--accent-color);
+}
+
+.btn i {
+    margin-right: 10px;
+    font-size: 1.2em;
+}
+
+.file-info {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.file-info h2 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(150px, 1fr));
+    gap: 0px;
+}
+
+.info-item {
+    text-align: center;
+}
+
+.info-item i {
+    font-size: 2em;
+    color: var(--primary-color);
+    margin-bottom: 4px;
+}
+
+.info-item p {
+    margin-bottom: 5px;
+}
+
+.hidden {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .glass-form, .file-info {
+        padding: 20px;
+    }
+}
+
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('upload-form');
+        const fileInput = document.getElementById('id_file');
+        const fileName = document.getElementById('file-name');
+        const fileInfo = document.getElementById('file-info');
+        const infoFileName = document.getElementById('info-file-name');
+        const fileSize = document.getElementById('file-size');
+        const fileType = document.getElementById('file-type');
+
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                fileName.textContent = file.name;
+                infoFileName.textContent = file.name;
+                fileSize.textContent = formatBytes(file.size);
+                fileType.textContent = file.type || 'Unknown';
+                fileInfo.classList.remove('hidden');
+            } else {
+                fileName.textContent = 'No file chosen';
+                fileInfo.classList.add('hidden');
+            }
+        });
+
+        function formatBytes(bytes, decimals = 2) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const dm = decimals < 0 ? 0 : decimals;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+        }
+    });
+</script>
+{% endblock %}

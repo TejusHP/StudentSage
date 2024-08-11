@@ -1,0 +1,32 @@
+{% extends 'firstapp/base.html' %}
+
+{% block body_block %}
+<div>
+    <div>
+        <h1>
+            {% if not form.instance.pk %}
+                Add Test
+            {% else %}
+                Update Test
+            {% endif %}
+        </h1>
+    </div>
+
+    <div>
+        <form action="" method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div>
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}
+                        <small>{{ field.help_text }}</small>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

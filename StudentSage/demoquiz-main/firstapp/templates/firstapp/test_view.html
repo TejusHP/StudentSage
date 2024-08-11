@@ -1,0 +1,68 @@
+{% extends "firstapp/base.html" %}
+{% load firstapp_extras %}
+{% block title %}Test Details{% endblock %}
+
+
+{% load static %}
+{% block style_block %}
+<link rel="stylesheet" href="{% static 'firstapp/teacher_detail.css' %}">
+{% endblock %}
+
+
+{% block body_block %}
+<div class="content-container">
+  <h1 class="section-title">Test Details</h1>
+  <div class="test-info">
+    <h2>{{ test.display_name }}</h2>
+    <p><strong>Command:</strong> {{ test.test_name }}</p>
+    <p><strong>Start Time:</strong> {{ test.start_time }}</p>
+    <p><strong>End Time:</strong> {{ test.end_time }}</p>
+    <p><strong>Test Marks:</strong> {{ test.test_total_marks }}</p>
+    <p><strong>Class Average:</strong> {{ average }}</p>
+  </div>
+
+  <div class="students-container">
+    <h3 class="section-title">Students</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Attempt Status</th>
+          <th>Start Time</th>
+          <th>Submit Time</th>
+          <th>Marks</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for student in students %}
+        <tr>
+          <td>{{ student.name.username }}</td>
+          <td>
+            <span class="status-badge {% if student|student_test_attempt_status:test == 'Accepted' %}status-active{% else %}status-inactive{% endif %}">
+              {{ student|student_test_attempt_status:test }}
+            </span>
+          </td>
+          <td>{{ student|student_test_start_time:test }}</td>
+          <td>{{ student|student_test_end_time:test }}</td>
+          <td>{{ student|student_test_attempt_marks:test }}</td>
+          <td>
+            <a href="{% url 'firstapp:preview-test' id=test.id stud_id=student.id %}" class="button button-outline button-small">Preview</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="action-buttons" style="justify-content: space-between;">
+    <!-- <a href="#" class="button button-primary">Download Results</a> -->
+    <a href="{% url 'firstapp:home' %}" class="button button-outline">Back to Tests</a>
+    <div style="display: flex; justify-content: flex-end;">
+      <a href="{% url 'firstapp:update-test' pk=test.id %}"><img src="{% static 'firstapp/images/customize.png'%} " width="30px" height="30px" alt="img"></a>
+      <a href="{% url 'firstapp:delete-test' pk=test.id %}"><img src="{% static 'firstapp/images/delete.png'%} " width="30px" height="30px" alt="img" style="margin-left: 5px;"></a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
